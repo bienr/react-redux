@@ -1,32 +1,68 @@
-import React from "react";
-import { render } from "react-dom";
+// import React from "react";
+// import { render } from "react-dom";
+//
+// import { Main } from "./components/Main";
+// import { User } from "./components/User";
+//
+// export class App extends React.Component {
+//
+//     constructor() {
+//         super();
+//         this.state = {
+//             username: "angelbein"
+//         };
+//     }
+//
+//     onChangeUsername(newName) {
+//         this.setState({
+//             username: newName
+//         });
+//     }
+//
+//     render() {
+//         return (
+//             <div className="container">
+//                 <Main changeUsername={this.onChangeUsername.bind(this)} />
+//                 <User username={this.state.username} />
+//             </div>
+//         );
+//     }
+// }
+//
+// render(<App/>, window.document.getElementById("app"));
 
-import { Main } from "./components/Main";
-import { User } from "./components/User";
+import { createStore } from "redux";
 
-export class App extends React.Component {
-
-    constructor() {
-        super();
-        this.state = {
-            username: "angelbein"
-        };
+const reducer = (state, action) => {
+    switch (action.type) {
+        case "ADD":
+            state += action.payload;
+            break;
+        case "SUBTRACT":
+            state -= action.payload;
+            break;
     }
+    return state;
+};
 
-    onChangeUsername(newName) {
-        this.setState({
-            username: newName
-        });
-    }
+const store = createStore(reducer, 1);
 
-    render() {
-        return (
-            <div className="container">
-                <Main changeUsername={this.onChangeUsername.bind(this)} />
-                <User username={this.state.username} />
-            </div>
-        );
-    }
-}
+store.subscribe(() => {
+    console.log("STORE Updated: ", store.getState());
+});
 
-render(<App/>, window.document.getElementById("app"));
+store.dispatch({
+    type: "ADD",
+    payload: 80
+});
+
+store.dispatch({
+    type: "ADD",
+    payload: 100
+});
+
+store.dispatch({
+    type: "SUBTRACT",
+    payload: 10
+});
+
